@@ -7,7 +7,7 @@ Aplikasi frontend untuk memantau armada kendaraan secara waktu nyata. Aplikasi i
 Checklist sesuai spesifikasi tes:
 
 - [x] Mengambil data kendaraan melalui REST API MBTA V3 (`GET /vehicles`)
-- [x] Menampilkan data kendaraan dalam bentuk grid Card: label kendaraan, badge status saat ini (`IN_TRANSIT_TO`, `STOPPED_AT`, `INCOMING_AT` dengan warna berbeda dan label yang mudah dibaca), latitude, longitude, dan waktu update terakhir (format tanggal Indonesia dan waktu relatif, contoh: "5 menit lalu")
+- [x] Menampilkan data kendaraan dalam bentuk grid Card: label kendaraan, indikator status saat ini (`IN_TRANSIT_TO`, `STOPPED_AT`, `INCOMING_AT` ditampilkan sebagai kotak warna solid dan label uppercase yang mudah dibaca), latitude, longitude, dan waktu update terakhir (format tanggal Indonesia dan waktu relatif, contoh: "5 menit lalu")
 - [x] Pagination server-side dengan teks rentang data (contoh: "Menampilkan 1-10 dari 100 Data"), pilihan jumlah data per halaman (5 / 10 / 20 / 50), informasi jumlah halaman, dan tombol Pertama, Sebelumnya, nomor halaman, Berikutnya, Terakhir
 - [x] Filter kendaraan berdasarkan Rute dan Trip dalam bentuk dropdown custom multi-select dengan checkbox, kotak pencarian, chips pilihan terpilih, dan tombol hapus semua
 - [x] Infinite scroll / lazy load pada daftar Rute dan Trip di dalam dropdown (IntersectionObserver memuat halaman berikutnya saat daftar di-scroll ke bawah)
@@ -16,7 +16,8 @@ Checklist sesuai spesifikasi tes:
 - [x] Indikator loading pada setiap halaman dan popup: skeleton card untuk daftar kendaraan, spinner untuk dropdown dan popup detail
 - [x] Pesan error yang mudah dipahami dalam Bahasa Indonesia, dengan tombol "Coba Lagi", termasuk pesan khusus untuk rate limit (HTTP 429) dan kegagalan jaringan
 - [x] Bonus: TypeScript di seluruh kode sumber
-- [x] Desain responsif: grid 1 kolom (mobile), 2 kolom (tablet), 3 kolom (desktop), 4 kolom (layar lebar)
+- [x] Pembaruan waktu nyata: data kendaraan dimuat ulang secara diam-diam (tanpa skeleton) setiap 30 detik untuk halaman dan filter yang sedang aktif; masthead menampilkan jam WIB, waktu data terakhir ("Data Per"), dan hitung mundur ke pembaruan berikutnya; polling berhenti otomatis saat tab disembunyikan atau popup detail terbuka, dan kegagalan pembaruan menampilkan pemberitahuan sambil mempertahankan data terakhir
+- [x] Desain responsif: grid 1 kolom (mobile), 2 kolom (tablet), 3 kolom (desktop)
 
 ## Teknologi
 
@@ -150,7 +151,6 @@ Pagination bersifat server-side menggunakan skema pagination resmi MBTA V3 (JSON
 
 ## Kemungkinan Pengembangan
 
-- Polling atau refresh otomatis berkala agar posisi kendaraan selalu terbaru.
 - Pencarian kendaraan berdasarkan label atau ID.
 - Filter tambahan berdasarkan status kendaraan dan okupansi.
 - Menyimpan filter dan halaman di URL query string agar dapat dibagikan.

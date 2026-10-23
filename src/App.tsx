@@ -68,9 +68,51 @@ export default function App() {
 
   const routeKey = selectedRoutes.join(',');
 
-  const { vehicles, loading, error, totalPages, totalCount, refetch } = useVehicles({
+  const {
+    vehicles, loading, refreshing, error, staleError, lastUpdatedAt,
+    totalPages, totalCount, refetch, silentRefetch,
+  } = useVehicles({
     page, perPage, routeIds: selectedRoutes, tripIds: selectedTrips, refreshKey,
   });
+
+  // ===== Pembaruan waktu nyata: polling diam-diam tiap 30 detik =====
+  const AUTO_REFRESH_MS = 30_000;
+  const [tabVisible, setTabVisible] = useState(() => !document.hidden);
+  useEffect(() => {
+    const onVis = () => setTabVisible(!document.hidden);
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, []);
+
+  const modalOpen = selectedVehicleId !== null;
+  useEffect(() => {
+    // Jeda saat tab disembunyikan atau popup detail terbuka; lanjut + segarkan saat kembali.
+    if (!tabVisible || modalOpen) return;
+    const id = setInterval(() => void silentRefetch(), AUTO_REFRESH_MS);
+    return () => clearInterval(id);
+  }, [silentRefetch, tabVisible, modalOpen]);
+
+  useEffect(() => {
+    if (tabVisible && !modalOpen && lastUpdatedAt) void silentRefetch();
+    // Hanya berjalan saat visibilitas/modal berubah, bukan tiap lastUpdatedAt berubah.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabVisible, modalOpen]);
+
+  // Hitung mundur ke pembaruan berikutnya (tik 1 detik, presentasi)
+  const [nowTick, setNowTick] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNowTick(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const countdownSec =
+    lastUpdatedAt && tabVisible && !modalOpen
+      ? Math.max(0, Math.round((lastUpdatedAt.getTime() + AUTO_REFRESH_MS - nowTick) / 1000))
+      : null;
+  const lastUpdatedLabel = lastUpdatedAt
+    ? new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+      }).format(lastUpdatedAt)
+    : '--:--:--';
 
   const routesFetcher = useCallback(
     (offset: number, signal?: AbortSignal) => fetchRoutesPage(offset, 20, signal),
@@ -154,6 +196,25 @@ export default function App() {
               <span className="label-micro text-[10px]">Live</span>
             </span>
             <span className="hidden h-8 w-px bg-paper/30 sm:block" aria-hidden="true" />
+            <div className="hidden md:block">
+              <p className="label-micro text-[9px] text-paper/55">Data Per</p>
+              <p className="mt-0.5 font-mono text-sm tabular-nums">
+                {lastUpdatedLabel} <span className="text-paper/60">WIB</span>
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <p className="label-micro text-[9px] text-paper/55">Auto-Refresh</p>
+              <p className="mt-0.5 font-mono text-sm tabular-nums">
+                {refreshing ? (
+                  <span className="text-paper">MEMPERBARUI</span>
+                ) : countdownSec !== null ? (
+                  <>{countdownSec} <span className="text-paper/60">DTK</span></>
+                ) : (
+                  <span className="text-paper/60">JEDA</span>
+                )}
+              </p>
+            </div>
+            <span className="hidden h-8 w-px bg-paper/30 sm:block" aria-hidden="true" />
             <WibClock />
             <button
               type="button"
@@ -165,6 +226,14 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      {staleError && (
+        <div className="bg-stop text-paper" role="alert">
+          <p className="mx-auto w-full max-w-[1440px] px-4 py-2 font-display text-[11px] font-bold tracking-[0.14em] uppercase sm:px-6 lg:px-10">
+            Pembaruan otomatis gagal — menampilkan data terakhir per {lastUpdatedLabel} WIB
+          </p>
+        </div>
+      )}
 
       {/* ===== Strip statistik (tabel koran, hairline via gap) ===== */}
       <section aria-label="Ringkasan armada" className="border-b border-ink">
@@ -276,7 +345,7 @@ export default function App() {
       <footer className="border-t border-ink">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-2 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <p className="label-micro text-[10px] text-ink/55">
-            Sumber data — MBTA V3 API (api-v3.mbta.com) · Peta © OpenStreetMap contributors
+            Sumber data — MBTA V3 API (api-v3.mbta.com) · Peta © OpenStreetMap contributors · Data diperbarui otomatis setiap 30 detik
           </p>
           <p className="label-micro text-[10px] text-ink/55">
             Tes Teknikal Frontend Engineer — PT Transportasi Jakarta
