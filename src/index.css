@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  /* Palet operations board: kertas hangat, tinta, satu aksen brand Transjakarta */
+  --color-paper: #f5f2ec;
+  --color-ink: #10151c;
+  --color-tj: #005baa;
+  --color-ok: #0e7a3d;
+  --color-stop: #c1272d;
+  --color-warn: #b97a0b;
+
+  --font-sans: "Archivo", ui-sans-system, system-ui, sans-serif;
+  --font-display: "Archivo", ui-sans-system, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-tj);
+  color: #ffffff;
+}
+
+/* Scrollbar tipis, tegas */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16, 21, 28, 0.45) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(16, 21, 28, 0.45);
+}
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Label mikro editorial: uppercase, tracking lebar */
+.label-micro {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Indikator LIVE: kotak solid berkedip tegas */
+@keyframes live-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0.2; }
+}
+.live-dot {
+  animation: live-blink 1.6s steps(1, end) infinite;
+}
+
+/* Perbaikan ikon marker bawaan Leaflet pada bundler Vite */
+.leaflet-default-icon-path {
+  background-image: url('leaflet/dist/images/marker-icon.png');
+}
+
+/* Leaflet mengikuti tipografi papan operasi */
+.leaflet-container {
+  font-family: var(--font-sans);
+}
