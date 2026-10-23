@@ -25,12 +25,12 @@ export class ApiError extends Error {
 
 export function friendlyError(err: unknown): string {
   if (err instanceof ApiError) {
-    if (err.isRateLimit) return 'Terlalu banyak permintaan ke server data (batas 429). Mohon tunggu beberapa saat lalu coba lagi.';
-    if (err.isNetwork) return 'Gagal terhubung ke server. Periksa koneksi internet Anda lalu coba lagi.';
+    if (err.isRateLimit) return 'Batas permintaan ke server data tercapai (429). Tunggu beberapa saat, lalu muat ulang.';
+    if (err.isNetwork) return 'Tidak ada koneksi ke server data. Periksa jaringan Anda, lalu muat ulang.';
     return err.message;
   }
   if (err instanceof DOMException && err.name === 'AbortError') return 'Permintaan dibatalkan.';
-  return 'Terjadi kesalahan yang tidak terduga. Silakan coba lagi.';
+  return 'Server data mengembalikan kesalahan. Muat ulang untuk mencoba kembali.';
 }
 
 async function fetchJson(url: string, signal?: AbortSignal): Promise<JsonApiResponse> {
@@ -39,7 +39,7 @@ async function fetchJson(url: string, signal?: AbortSignal): Promise<JsonApiResp
     res = await fetch(url, { signal, headers: { Accept: 'application/vnd.api+json' } });
   } catch (e) {
     if (e instanceof DOMException && e.name === 'AbortError') throw e;
-    throw new ApiError('Gagal terhubung ke server.', { isNetwork: true });
+    throw new ApiError('Tidak ada koneksi ke server data.', { isNetwork: true });
   }
   if (res.status === 429) {
     throw new ApiError('Terlalu banyak permintaan (429).', { status: 429, isRateLimit: true });
@@ -194,7 +194,7 @@ export async function fetchVehicleDetail(id: string, signal?: AbortSignal): Prom
   qs.set('include', 'trip,route');
   const json = await fetchJson(`${API_BASE}/vehicles/${encodeURIComponent(id)}?${qs.toString()}`, signal);
   const resource = Array.isArray(json.data) ? json.data[0] : json.data;
-  if (!resource) throw new ApiError('Data kendaraan tidak ditemukan.');
+  if (!resource) throw new ApiError('Data kendaraan tidak ditemukan di server.');
   const vehicle = parseVehicle(resource, json.included);
   // Bila included tidak membawa route/trip lengkap, ambil terpisah sebagai pelengkap
   // (tetap ringan, hanya 1 kendaraan). Kegagalan pelengkap tidak menggagalkan detail.
@@ -301,6 +301,6 @@ export function statusLabel(status: string | null): string {
     case 'IN_TRANSIT_TO': return 'Dalam Perjalanan';
     case 'STOPPED_AT': return 'Berhenti di Stasiun';
     case 'INCOMING_AT': return 'Segera Tiba';
-    default: return status ? status.replace(/_/g, ' ') : 'Tidak Diketahui';
+    default: return status ? status.replace(/_/g, ' ') : 'Status Tidak Diketahui';
   }
 }

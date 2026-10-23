@@ -28,7 +28,7 @@ export default function VehicleCard({ vehicle, onDetail }: Props) {
       onClick={() => onDetail(vehicle)}
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === 'Enter') onDetail(vehicle); }}
-      aria-label={`Detail kendaraan ${attributes.label ?? vehicle.id}`}
+      aria-label={`Rincian kendaraan ${attributes.label ?? vehicle.id}`}
     >
       {/* Strip warna rute dari API: fungsional, bukan dekorasi */}
       <div className="h-1 w-full shrink-0" style={{ backgroundColor: routeColor ?? 'rgba(16,21,28,0.15)' }} aria-hidden="true" />
@@ -47,10 +47,10 @@ export default function VehicleCard({ vehicle, onDetail }: Props) {
         <dl className="mt-3 divide-y divide-ink/10 border-t border-ink/15">
           <DataRow label="ID" value={vehicle.id} />
           <DataRow label="Rute" value={vehicle.routeId ?? '-'} />
-          <DataRow label="Lat" value={attributes.latitude ?? '-'} />
-          <DataRow label="Lng" value={attributes.longitude ?? '-'} />
+          <DataRow label="Latitude" value={attributes.latitude ?? '-'} />
+          <DataRow label="Longitude" value={attributes.longitude ?? '-'} />
           <div className="py-2">
-            <dt className="label-micro text-[10px] text-ink/55">Diperbarui</dt>
+            <dt className="label-micro text-[10px] text-ink/55">Laporan Terakhir</dt>
             <dd className="mt-1 font-mono text-[13px] tabular-nums">
               {formatDateTimeId(attributes.updated_at)}
               {attributes.updated_at && (
@@ -65,7 +65,7 @@ export default function VehicleCard({ vehicle, onDetail }: Props) {
         onClick={(e) => { e.stopPropagation(); onDetail(vehicle); }}
         className="mt-auto flex w-full items-center justify-between border-t border-ink px-5 py-3 font-display text-xs font-bold tracking-[0.18em] uppercase transition-colors hover:bg-ink hover:text-paper focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tj"
       >
-        <span>Lihat Detail</span>
+        <span>Buka Rincian</span>
         <span aria-hidden="true">&rarr;</span>
       </button>
     </article>

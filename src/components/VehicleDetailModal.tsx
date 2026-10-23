@@ -99,7 +99,7 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Detail kendaraan"
+      aria-label="Rincian kendaraan"
     >
       <div
         className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-none border border-ink bg-paper shadow-[8px_8px_0_#0b1d33] sm:m-2"
@@ -107,12 +107,12 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
       >
         <div className="sticky top-0 z-10 flex items-center justify-between bg-ink px-6 py-4 text-paper">
           <h2 className="font-display text-base font-extrabold tracking-tight uppercase sm:text-lg">
-            Detail Kendaraan{a?.label ? ` — ${a.label}` : ''}
+            Rincian Kendaraan{a?.label ? ` — ${a.label}` : ''}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Tutup detail"
+            aria-label="Tutup rincian"
             className="shrink-0 rounded-none border border-paper/60 px-3 py-1.5 font-display text-[11px] font-bold tracking-[0.18em] uppercase transition-colors hover:bg-paper hover:text-ink focus:outline-none focus:ring-2 focus:ring-paper"
           >
             Tutup
@@ -123,20 +123,20 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
           {loading && (
             <div className="flex flex-col items-center justify-center gap-3 py-16 text-ink/60">
               <span className="h-10 w-10 animate-spin rounded-full border-4 border-ink/15 border-t-tj" />
-              <p className="label-micro text-ink/60">Memuat detail kendaraan...</p>
+              <p className="label-micro text-ink/60">Memuat rincian kendaraan…</p>
             </div>
           )}
 
           {!loading && error && (
             <div className="rounded-none border border-stop bg-stop/5 px-5 py-4">
-              <p className="label-micro text-stop">Gagal memuat detail kendaraan</p>
+              <p className="label-micro text-stop">Rincian tidak dapat dimuat</p>
               <p className="mt-1.5 text-sm text-ink">{error}</p>
               <button
                 type="button"
                 onClick={() => setRetryKey((k) => k + 1)}
                 className="mt-3 rounded-none bg-stop px-4 py-2.5 font-display text-xs font-bold tracking-[0.18em] text-white uppercase hover:bg-ink"
               >
-                Coba Lagi
+                Muat Ulang
               </button>
             </div>
           )}
@@ -147,14 +147,14 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
                 <StatusBadge status={a.current_status} />
                 <span className="hidden h-4 w-px bg-ink/25 sm:block" aria-hidden="true" />
                 <span className="font-mono text-[13px] tabular-nums text-ink/70">
-                  <span className="label-micro mr-2 text-[10px] text-ink/55">Diperbarui</span>
+                  <span className="label-micro mr-2 text-[10px] text-ink/55">Laporan Terakhir</span>
                   {formatDateTimeId(a.updated_at)} {a.updated_at && `(${formatRelativeId(a.updated_at)})`}
                 </span>
               </div>
 
               {a.latitude !== null && a.longitude !== null ? (
                 <div>
-                  <SectionTitle>Posisi Kendaraan</SectionTitle>
+                  <SectionTitle>Posisi di Peta</SectionTitle>
                   <div ref={mapRef} className="mt-3 h-64 w-full overflow-hidden rounded-none border border-ink" />
                 </div>
               ) : (
@@ -162,29 +162,29 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
               )}
 
               <section>
-                <SectionTitle>Informasi Kendaraan</SectionTitle>
+                <SectionTitle>Data Kendaraan</SectionTitle>
                 <dl className="divide-y divide-ink/10">
-                  <Row label="Label" value={a.label} />
+                  <Row label="Nomor Kendaraan" value={a.label} />
                   <Row label="ID Kendaraan" value={vehicle.id} />
                   <Row label="Latitude" value={a.latitude} />
                   <Row label="Longitude" value={a.longitude} />
-                  <Row label="Bearing (derajat)" value={a.bearing} />
+                  <Row label="Arah Hadap (derajat)" value={a.bearing} />
                   <Row label="Kecepatan" value={a.speed} />
-                  <Row label="Status Okupansi" value={a.occupancy_status ? a.occupancy_status.replace(/_/g, ' ') : null} mono={false} />
-                  <Row label="Urutan Pemberhentian Saat Ini" value={a.current_stop_sequence} />
-                  <Row label="Direction ID" value={a.direction_id} />
-                  <Row label="Jumlah Carriages" value={a.carriages ? a.carriages.length : 0} />
-                  <Row label="Stop ID" value={vehicle.stopId} />
-                  <Row label="Revenue" value={a.revenue === null ? null : a.revenue ? 'Ya' : 'Tidak'} mono={false} />
+                  <Row label="Okupansi" value={a.occupancy_status ? a.occupancy_status.replace(/_/g, ' ') : null} mono={false} />
+                  <Row label="Pemberhentian Ke-" value={a.current_stop_sequence} />
+                  <Row label="ID Arah" value={a.direction_id} />
+                  <Row label="Jumlah Rangkaian" value={a.carriages ? a.carriages.length : 0} />
+                  <Row label="ID Pemberhentian" value={vehicle.stopId} />
+                  <Row label="Layanan Komersial" value={a.revenue === null ? null : a.revenue ? 'Ya' : 'Tidak'} mono={false} />
                 </dl>
               </section>
 
               <section>
-                <SectionTitle>Data Rute</SectionTitle>
+                <SectionTitle>Rute</SectionTitle>
                 {vehicle.route ? (
                   <dl className="divide-y divide-ink/10">
-                    <Row label="Nama Panjang" value={vehicle.route.attributes.long_name} mono={false} />
-                    <Row label="Nama Pendek" value={vehicle.route.attributes.short_name} mono={false} />
+                    <Row label="Nama Rute" value={vehicle.route.attributes.long_name} mono={false} />
+                    <Row label="Kode Rute" value={vehicle.route.attributes.short_name} mono={false} />
                     <Row label="ID Rute" value={vehicle.route.id} />
                     <Row
                       label="Warna Rute"
@@ -203,15 +203,15 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
               </section>
 
               <section>
-                <SectionTitle>Data Trip</SectionTitle>
+                <SectionTitle>Trip</SectionTitle>
                 {vehicle.trip ? (
                   <dl className="divide-y divide-ink/10">
                     <Row label="ID Trip" value={vehicle.trip.id} />
-                    <Row label="Headsign" value={vehicle.trip.attributes.headsign} mono={false} />
-                    <Row label="Direction ID" value={vehicle.trip.attributes.direction_id} />
-                    <Row label="Block ID" value={vehicle.trip.attributes.block_id} />
+                    <Row label="Tujuan (Headsign)" value={vehicle.trip.attributes.headsign} mono={false} />
+                    <Row label="ID Arah" value={vehicle.trip.attributes.direction_id} />
+                    <Row label="ID Blok" value={vehicle.trip.attributes.block_id} />
                     <Row label="Akses Kursi Roda" value={vehicle.trip.attributes.wheelchair_accessible === 1 ? 'Ya' : 'Tidak'} mono={false} />
-                    <Row label="Sepeda Diperbolehkan" value={vehicle.trip.attributes.bikes_allowed === 1 ? 'Ya' : 'Tidak'} mono={false} />
+                    <Row label="Sepeda Boleh Dibawa" value={vehicle.trip.attributes.bikes_allowed === 1 ? 'Ya' : 'Tidak'} mono={false} />
                   </dl>
                 ) : (
                   <p className="py-2 text-sm text-ink/60">Data trip tidak tersedia untuk kendaraan ini. ID Trip: {vehicle.tripId ?? '-'}</p>

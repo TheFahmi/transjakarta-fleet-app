@@ -82,7 +82,7 @@ export default function MultiSelectDropdown({
         aria-expanded={open}
       >
         <span className="truncate">
-          {selectedIds.length > 0 ? `${selectedIds.length} dipilih` : placeholder}
+          {selectedIds.length > 0 ? `${selectedIds.length} terpilih` : placeholder}
         </span>
         <svg className={`h-4 w-4 shrink-0 text-ink transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg>
       </button>
@@ -103,7 +103,7 @@ export default function MultiSelectDropdown({
             </span>
           ))}
           <button type="button" onClick={() => onChange([])} className="font-display text-[11px] font-bold tracking-[0.14em] text-stop uppercase hover:underline">
-            Hapus semua
+            Bersihkan
           </button>
         </div>
       )}
@@ -124,17 +124,17 @@ export default function MultiSelectDropdown({
             {loading && (
               <div className="flex items-center justify-center gap-2 py-6 text-sm text-ink/60">
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-ink/20 border-t-tj" />
-                Memuat data...
+                Memuat…
               </div>
             )}
             {!loading && error && (
               <div className="px-3 py-4 text-sm text-stop">
                 <p>{error}</p>
-                {onRetry && <button type="button" onClick={onRetry} className="mt-2 font-bold text-stop underline">Coba Lagi</button>}
+                {onRetry && <button type="button" onClick={onRetry} className="mt-2 font-bold text-stop underline">Muat Ulang</button>}
               </div>
             )}
             {!loading && !error && filtered.length === 0 && (
-              <p className="px-3 py-4 text-sm text-ink/60">Tidak ada data yang ditemukan.</p>
+              <p className="px-3 py-4 text-sm text-ink/60">Tidak ada hasil untuk pencarian ini.</p>
             )}
             {!loading && filtered.map((item) => (
               <label key={item.id} className="flex cursor-pointer items-start gap-2.5 px-2.5 py-2 text-sm hover:bg-paper">
@@ -159,11 +159,11 @@ export default function MultiSelectDropdown({
             {loadingMore && (
               <div className="flex items-center justify-center gap-2 py-3 text-xs text-ink/60">
                 <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-ink/20 border-t-tj" />
-                Memuat lebih banyak...
+                Memuat berikutnya…
               </div>
             )}
             {!loading && !hasMore && items.length > 0 && (
-              <p className="py-3 text-center font-mono text-[11px] text-ink/40">Semua data sudah dimuat.</p>
+              <p className="py-3 text-center font-mono text-[11px] text-ink/40">Seluruh daftar sudah dimuat.</p>
             )}
           </div>
         </div>

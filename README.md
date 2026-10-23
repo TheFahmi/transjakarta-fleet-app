@@ -14,7 +14,7 @@ Checklist sesuai spesifikasi tes:
 - [x] Detail kendaraan dalam bentuk popup/modal: label, status, latitude, longitude, waktu update terakhir, data rute, data trip, dan data lain (bearing, kecepatan, status okupansi, urutan pemberhentian, direction ID, jumlah carriages, stop ID)
 - [x] Bonus: peta posisi kendaraan di dalam popup menggunakan Leaflet dan tile OpenStreetMap
 - [x] Indikator loading pada setiap halaman dan popup: skeleton card untuk daftar kendaraan, spinner untuk dropdown dan popup detail
-- [x] Pesan error yang mudah dipahami dalam Bahasa Indonesia, dengan tombol "Coba Lagi", termasuk pesan khusus untuk rate limit (HTTP 429) dan kegagalan jaringan
+- [x] Pesan error yang mudah dipahami dalam Bahasa Indonesia, dengan tombol "Muat Ulang", termasuk pesan khusus untuk rate limit (HTTP 429) dan kegagalan jaringan
 - [x] Bonus: TypeScript di seluruh kode sumber
 - [x] Pembaruan waktu nyata: data kendaraan dimuat ulang secara diam-diam (tanpa skeleton) setiap 30 detik untuk halaman dan filter yang sedang aktif; masthead menampilkan jam WIB, waktu data terakhir ("Data Per"), dan hitung mundur ke pembaruan berikutnya; polling berhenti otomatis saat tab disembunyikan atau popup detail terbuka, dan kegagalan pembaruan menampilkan pemberitahuan sambil mempertahankan data terakhir
 - [x] Desain responsif: grid 1 kolom (mobile), 2 kolom (tablet), 3 kolom (desktop)
@@ -88,7 +88,7 @@ transjakarta-fleet-app/
       MultiSelectDropdown.tsx       Dropdown multi-select reusable (Rute dan Trip)
       VehicleDetailModal.tsx        Popup detail kendaraan + peta Leaflet
       SkeletonCard.tsx              Placeholder loading berbentuk card
-      ErrorBanner.tsx               Banner error dengan tombol Coba Lagi
+      ErrorBanner.tsx               Banner error dengan tombol Muat Ulang
 ```
 
 ### Aliran Data

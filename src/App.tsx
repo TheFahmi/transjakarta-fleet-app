@@ -186,14 +186,14 @@ export default function App() {
                 Sistem Manajemen Armada
               </h1>
               <p className="label-micro mt-1.5 text-[10px] text-paper/55">
-                Papan Operasi — Pemantauan Waktu Nyata
+                Papan Operasi — Data Langsung · Diperbarui Tiap 30 Detik
               </p>
             </div>
           </div>
           <div className="flex items-center gap-5 sm:gap-6">
             <span className="flex items-center gap-2">
               <span className="live-dot h-2.5 w-2.5 bg-ok" aria-hidden="true" />
-              <span className="label-micro text-[10px]">Live</span>
+              <span className="label-micro text-[10px]">Langsung</span>
             </span>
             <span className="hidden h-8 w-px bg-paper/30 sm:block" aria-hidden="true" />
             <div className="hidden md:block">
@@ -221,7 +221,7 @@ export default function App() {
               onClick={handleRefresh}
               className="rounded-none border border-paper/70 px-4 py-2.5 font-display text-xs font-bold tracking-[0.18em] uppercase transition-colors hover:bg-paper hover:text-ink focus:outline-none focus:ring-2 focus:ring-paper"
             >
-              Refresh Data
+              Perbarui Sekarang
             </button>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function App() {
       {staleError && (
         <div className="bg-stop text-paper" role="alert">
           <p className="mx-auto w-full max-w-[1440px] px-4 py-2 font-display text-[11px] font-bold tracking-[0.14em] uppercase sm:px-6 lg:px-10">
-            Pembaruan otomatis gagal — menampilkan data terakhir per {lastUpdatedLabel} WIB
+            Pembaruan otomatis gagal — data yang tampil adalah data per {lastUpdatedLabel} WIB
           </p>
         </div>
       )}
@@ -238,10 +238,10 @@ export default function App() {
       {/* ===== Strip statistik (tabel koran, hairline via gap) ===== */}
       <section aria-label="Ringkasan armada" className="border-b border-ink">
         <div className="grid grid-cols-2 gap-px bg-ink/20 sm:grid-cols-3 lg:grid-cols-5">
-          <StatCell label="Total Kendaraan" note="Estimasi dari API" value={loading ? '...' : totalCount} />
+          <StatCell label="Kendaraan Terpantau" note="Estimasi · API MBTA" value={loading ? '...' : totalCount} />
           <StatCell label="Halaman" value={`${page} / ${Math.max(totalPages, 1)}`} />
           <StatCell label="Dalam Perjalanan" note="Di halaman ini" dot="bg-ok" value={loading ? '...' : pageStatusCounts.transit} />
-          <StatCell label="Berhenti" note="Di halaman ini" dot="bg-stop" value={loading ? '...' : pageStatusCounts.stopped} />
+          <StatCell label="Berhenti di Stasiun" note="Di halaman ini" dot="bg-stop" value={loading ? '...' : pageStatusCounts.stopped} />
           <StatCell
             label="Segera Tiba"
             note="Di halaman ini"
@@ -258,21 +258,21 @@ export default function App() {
           <aside className="lg:col-span-3">
             <div className="rounded-none border border-ink bg-white p-5 lg:sticky lg:top-6">
               <div className="flex items-center justify-between gap-3 border-b-2 border-ink pb-3">
-                <h2 className="label-micro">Filter</h2>
+                <h2 className="label-micro">Saring Data</h2>
                 {hasActiveFilter && (
                   <button
                     type="button"
                     onClick={clearAllFilters}
                     className="font-display text-[11px] font-bold tracking-[0.14em] text-stop uppercase hover:underline"
                   >
-                    Reset Semua
+                    Bersihkan
                   </button>
                 )}
               </div>
               <div className="mt-5 space-y-6">
                 <MultiSelectDropdown
                   label="Rute"
-                  placeholder="Pilih rute (dapat lebih dari satu)"
+                  placeholder="Pilih satu atau beberapa rute"
                   items={routes.items}
                   selectedIds={selectedRoutes}
                   onChange={handleRoutesChange}
@@ -285,7 +285,7 @@ export default function App() {
                 />
                 <MultiSelectDropdown
                   label="Trip"
-                  placeholder="Pilih trip (dapat lebih dari satu)"
+                  placeholder="Pilih satu atau beberapa trip"
                   items={trips.items}
                   selectedIds={selectedTrips}
                   onChange={handleTripsChange}
@@ -296,7 +296,7 @@ export default function App() {
                   error={trips.error}
                   onRetry={trips.reload}
                   disabled={!tripsEnabled}
-                  disabledHint="Pilih rute terlebih dahulu untuk memuat daftar trip"
+                  disabledHint="Daftar trip muncul setelah rute dipilih"
                 />
               </div>
             </div>
@@ -311,11 +311,11 @@ export default function App() {
               </div>
             ) : !error && vehicles.length === 0 ? (
               <div className="rounded-none border border-ink bg-white px-6 py-16">
-                <p className="label-micro text-ink/50">Hasil Pencarian</p>
+                <p className="label-micro text-ink/50">Daftar Kendaraan</p>
                 <p className="mt-2 font-display text-xl font-extrabold tracking-tight uppercase">
-                  Tidak ada kendaraan yang ditemukan
+                  Tidak ada kendaraan pada saringan ini
                 </p>
-                <p className="mt-2 text-sm text-ink/60">Coba ubah filter rute atau trip, atau muat ulang data.</p>
+                <p className="mt-2 text-sm text-ink/60">Tidak ada kendaraan yang cocok dengan rute dan trip terpilih. Bersihkan saringan atau perbarui data.</p>
               </div>
             ) : !error ? (
               <>
@@ -345,7 +345,7 @@ export default function App() {
       <footer className="border-t border-ink">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-2 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <p className="label-micro text-[10px] text-ink/55">
-            Sumber data — MBTA V3 API (api-v3.mbta.com) · Peta © OpenStreetMap contributors · Data diperbarui otomatis setiap 30 detik
+            Data — MBTA V3 API (api-v3.mbta.com) · Peta © OpenStreetMap contributors · Diperbarui otomatis setiap 30 detik
           </p>
           <p className="label-micro text-[10px] text-ink/55">
             Tes Teknikal Frontend Engineer — PT Transportasi Jakarta
