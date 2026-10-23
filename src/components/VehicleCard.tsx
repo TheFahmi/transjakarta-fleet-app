@@ -7,11 +7,11 @@ interface Props {
   onDetail: (vehicle: Vehicle) => void;
 }
 
-function DataRow({ label, value, mono = true }: { label: string; value: React.ReactNode; mono?: boolean }) {
+function DataRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 py-2">
-      <dt className="label-micro shrink-0 text-[10px] text-ink/55">{label}</dt>
-      <dd className={`text-right break-all ${mono ? 'font-mono text-[13px] tabular-nums' : 'text-[13px] font-semibold'}`}>
+    <div className="flex items-baseline justify-between gap-3 py-2.5">
+      <dt className="shrink-0 text-xs font-medium text-slate">{label}</dt>
+      <dd className="text-right text-[13.5px] font-semibold break-all text-ink tabular-nums">
         {value}
       </dd>
     </div>
@@ -21,49 +21,58 @@ function DataRow({ label, value, mono = true }: { label: string; value: React.Re
 export default function VehicleCard({ vehicle, onDetail }: Props) {
   const { attributes } = vehicle;
   const routeName = vehicle.route?.attributes.long_name || vehicle.route?.attributes.short_name || vehicle.routeId;
-  const routeColor = vehicle.route?.attributes.color ? `#${vehicle.route.attributes.color}` : undefined;
+  const routeColor = vehicle.route?.attributes.color ? `#${vehicle.route.attributes.color}` : '#0846A1';
+  const routeTextColor = vehicle.route?.attributes.text_color ? `#${vehicle.route.attributes.text_color}` : '#FFFFFF';
+  const routeCode = vehicle.route?.attributes.short_name || vehicle.routeId || '-';
+  const codeSize = routeCode.length > 4 ? 'text-[10px]' : routeCode.length > 3 ? 'text-[11px]' : 'text-[13px]';
   return (
     <article
-      className="flex cursor-pointer flex-col rounded-none border border-ink bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-tj"
+      className="flex cursor-pointer flex-col rounded-[20px] bg-white p-5 shadow-card transition-shadow focus:outline-none focus:ring-2 focus:ring-bright/60"
       onClick={() => onDetail(vehicle)}
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === 'Enter') onDetail(vehicle); }}
       aria-label={`Rincian kendaraan ${attributes.label ?? vehicle.id}`}
     >
-      {/* Strip warna rute dari API: fungsional, bukan dekorasi */}
-      <div className="h-1 w-full shrink-0" style={{ backgroundColor: routeColor ?? 'rgba(16,21,28,0.15)' }} aria-hidden="true" />
-      <div className="flex flex-1 flex-col px-5 pt-4">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-[28px] leading-none font-extrabold tracking-tight">
-            {attributes.label ?? vehicle.id}
-          </h3>
-          <div className="pt-1.5">
-            <StatusBadge status={attributes.current_status} />
-          </div>
-        </div>
+      <div className="flex items-center gap-3">
+        {/* Kode rute dalam lingkaran warna koridor, sesuai gaya TJ App */}
+        <span
+          className={`flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full font-bold ${codeSize}`}
+          style={{ backgroundColor: routeColor, color: routeTextColor }}
+          aria-hidden="true"
+        >
+          {routeCode}
+        </span>
         {routeName && (
-          <p className="mt-2.5 text-sm leading-snug font-semibold">{routeName}</p>
+          <p className="line-clamp-2 min-w-0 flex-1 text-sm leading-snug font-semibold text-ink">{routeName}</p>
         )}
-        <dl className="mt-3 divide-y divide-ink/10 border-t border-ink/15">
-          <DataRow label="ID" value={vehicle.id} />
-          <DataRow label="Rute" value={vehicle.routeId ?? '-'} />
-          <DataRow label="Latitude" value={attributes.latitude ?? '-'} />
-          <DataRow label="Longitude" value={attributes.longitude ?? '-'} />
-          <div className="py-2">
-            <dt className="label-micro text-[10px] text-ink/55">Laporan Terakhir</dt>
-            <dd className="mt-1 font-mono text-[13px] tabular-nums">
-              {formatDateTimeId(attributes.updated_at)}
-              {attributes.updated_at && (
-                <span className="text-ink/50"> ({formatRelativeId(attributes.updated_at)})</span>
-              )}
-            </dd>
-          </div>
-        </dl>
       </div>
+      <div className="mt-3.5 flex items-start justify-between gap-3">
+        <h3 className="text-[26px] leading-none font-extrabold text-ink">
+          {attributes.label ?? vehicle.id}
+        </h3>
+        <div className="pt-0.5">
+          <StatusBadge status={attributes.current_status} />
+        </div>
+      </div>
+      <dl className="mt-4 flex-1 divide-y divide-slate/10 border-t border-slate/10">
+        <DataRow label="ID" value={vehicle.id} />
+        <DataRow label="Rute" value={vehicle.routeId ?? '-'} />
+        <DataRow label="Latitude" value={attributes.latitude ?? '-'} />
+        <DataRow label="Longitude" value={attributes.longitude ?? '-'} />
+        <div className="flex items-baseline justify-between gap-3 py-2.5">
+          <dt className="shrink-0 text-xs font-medium text-slate">Laporan Terakhir</dt>
+          <dd className="text-right text-[13.5px] font-semibold text-ink tabular-nums">
+            {formatDateTimeId(attributes.updated_at)}
+            {attributes.updated_at && (
+              <span className="font-medium text-muted"> ({formatRelativeId(attributes.updated_at)})</span>
+            )}
+          </dd>
+        </div>
+      </dl>
       <button
         type="button"
         onClick={(e) => { e.stopPropagation(); onDetail(vehicle); }}
-        className="mt-auto flex w-full items-center justify-between border-t border-ink px-5 py-3 font-display text-xs font-bold tracking-[0.18em] uppercase transition-colors hover:bg-ink hover:text-paper focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tj"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-tj-blue py-2.5 text-sm font-bold text-white transition-colors hover:bg-tj-active focus:outline-none focus:ring-2 focus:ring-bright/60"
       >
         <span>Buka Rincian</span>
         <span aria-hidden="true">&rarr;</span>

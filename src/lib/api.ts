@@ -296,6 +296,20 @@ export function formatRelativeId(iso: string | null): string {
   return `${Math.floor(diffSec / 86400)} hari lalu`;
 }
 
+export function occupancyLabel(status: string | null): string | null {
+  if (!status) return null;
+  switch (status) {
+    case 'MANY_SEATS_AVAILABLE': return 'Banyak kursi kosong';
+    case 'FEW_SEATS_AVAILABLE': return 'Kursi hampir penuh';
+    case 'STANDING_ROOM_ONLY': return 'Hanya ruang berdiri';
+    case 'CRUSHED_STANDING_ROOM_ONLY': return 'Berdiri padat';
+    case 'FULL': return 'Penuh';
+    case 'NOT_ACCEPTING_PASSENGERS': return 'Tidak menerima penumpang';
+    case 'NO_DATA_AVAILABLE': return 'Data tidak tersedia';
+    default: return status.replace(/_/g, ' ').toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
+  }
+}
+
 export function statusLabel(status: string | null): string {
   switch (status) {
     case 'IN_TRANSIT_TO': return 'Dalam Perjalanan';

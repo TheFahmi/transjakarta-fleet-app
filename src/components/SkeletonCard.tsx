@@ -1,29 +1,26 @@
 export default function SkeletonCard() {
   return (
-    <div className="animate-pulse rounded-none border border-ink/25 bg-white" aria-hidden="true">
-      <div className="h-1 w-full bg-ink/15" />
-      <div className="p-5">
-        <div className="flex items-start justify-between gap-2">
-          <div className="h-7 w-24 bg-ink/15" />
-          <div className="h-3 w-20 bg-ink/15" />
+    <div className="animate-pulse rounded-[20px] bg-white p-5 shadow-card" aria-hidden="true">
+      <div className="flex items-center gap-3">
+        <div className="h-[42px] w-[42px] shrink-0 rounded-full bg-tile" />
+        <div className="h-4 w-2/3 rounded-full bg-soft" />
+      </div>
+      <div className="mt-4 h-7 w-24 rounded-lg bg-soft" />
+      <div className="mt-4 border-t border-slate/10">
+        <div className="flex justify-between border-b border-slate/10 py-3">
+          <div className="h-3 w-14 rounded-full bg-soft" />
+          <div className="h-3 w-20 rounded-full bg-soft" />
         </div>
-        <div className="mt-3 h-4 w-3/4 bg-ink/10" />
-        <div className="mt-4 space-y-0 border-t border-ink/10">
-          <div className="flex justify-between border-b border-ink/10 py-2.5">
-            <div className="h-3 w-14 bg-ink/10" />
-            <div className="h-3 w-20 bg-ink/10" />
-          </div>
-          <div className="flex justify-between border-b border-ink/10 py-2.5">
-            <div className="h-3 w-10 bg-ink/10" />
-            <div className="h-3 w-24 bg-ink/10" />
-          </div>
-          <div className="flex justify-between py-2.5">
-            <div className="h-3 w-16 bg-ink/10" />
-            <div className="h-3 w-16 bg-ink/10" />
-          </div>
+        <div className="flex justify-between border-b border-slate/10 py-3">
+          <div className="h-3 w-10 rounded-full bg-soft" />
+          <div className="h-3 w-24 rounded-full bg-soft" />
+        </div>
+        <div className="flex justify-between py-3">
+          <div className="h-3 w-16 rounded-full bg-soft" />
+          <div className="h-3 w-16 rounded-full bg-soft" />
         </div>
       </div>
-      <div className="h-11 border-t border-ink/15 bg-ink/5" />
+      <div className="mt-2 h-10 rounded-full bg-tile" />
     </div>
   );
 }

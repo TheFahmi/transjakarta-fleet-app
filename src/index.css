@@ -1,65 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
 @theme {
-  /* Palet operations board: kertas hangat, tinta, satu aksen brand Transjakarta */
-  --color-paper: #f5f2ec;
-  --color-ink: #10151c;
-  --color-tj: #005baa;
-  --color-ok: #0e7a3d;
-  --color-stop: #c1272d;
-  --color-warn: #b97a0b;
+  /* Design System TJ App: biru dominan, sudut membulat, permukaan terang bertingkat */
+  --color-tj-blue: #0846a1;
+  --color-tj-active: #003e9f;
+  --color-bright: #0b7bfc;
+  --color-soft: #f2f7fc;
+  --color-tile: #e7f0fe;
+  --color-ink: #101e2e;
+  --color-slate: #5a6b80;
+  --color-muted: #8a99ad;
+  --color-success: #1f9d55;
+  --color-danger: #d92b2b;
+  --color-amber: #e8a00c;
 
-  --font-sans: "Archivo", ui-sans-system, system-ui, sans-serif;
-  --font-display: "Archivo", ui-sans-system, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-sans: "Plus Jakarta Sans", ui-sans-system, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-system, system-ui, sans-serif;
+  --font-mono: "Plus Jakarta Sans", ui-sans-system, system-ui, sans-serif;
+
+  /* Shadow lembut khas TJ App */
+  --shadow-card: 0 6px 24px rgba(8, 70, 161, 0.1), 0 1.5px 6px rgba(16, 30, 46, 0.06);
+  --shadow-pop: 0 24px 60px rgba(8, 70, 161, 0.2), 0 4px 16px rgba(16, 30, 46, 0.1);
 }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background-color: var(--color-paper);
+  background-color: var(--color-soft);
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background-color: var(--color-tj);
+  background-color: var(--color-bright);
   color: #ffffff;
 }
 
-/* Scrollbar tipis, tegas */
+/* Scrollbar tipis */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(16, 21, 28, 0.45) transparent;
+  scrollbar-color: rgba(90, 107, 128, 0.45) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(16, 21, 28, 0.45);
+  background-color: rgba(90, 107, 128, 0.45);
+  border-radius: 999px;
 }
 *::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-/* Label mikro editorial: uppercase, tracking lebar */
+/* Label kecil gaya TJ: sentence case, slate, semibold (bukan uppercase editorial) */
 .label-micro {
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
-/* Indikator LIVE: kotak solid berkedip tegas */
-@keyframes live-blink {
-  0%, 55% { opacity: 1; }
-  56%, 100% { opacity: 0.2; }
+/* Indikator langsung: titik berdenyut halus */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
 }
 .live-dot {
-  animation: live-blink 1.6s steps(1, end) infinite;
+  animation: live-pulse 1.6s ease-in-out infinite;
 }
 
 /* Perbaikan ikon marker bawaan Leaflet pada bundler Vite */
@@ -67,7 +77,7 @@ body {
   background-image: url('leaflet/dist/images/marker-icon.png');
 }
 
-/* Leaflet mengikuti tipografi papan operasi */
+/* Leaflet mengikuti tipografi TJ App */
 .leaflet-container {
   font-family: var(--font-sans);
 }
