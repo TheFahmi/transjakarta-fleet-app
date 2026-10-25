@@ -184,7 +184,7 @@ export default function App() {
               Sistem Manajemen Armada
             </h1>
             <p className="mt-1 text-[13px] font-medium text-white/70">
-              Papan Operasi — Data Langsung · Diperbarui Tiap 30 Detik
+              Data Langsung · Diperbarui Tiap 30 Detik
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
