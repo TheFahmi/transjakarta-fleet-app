@@ -340,9 +340,6 @@ export default function App() {
       <footer>
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-2 px-4 py-6 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <p className="text-xs font-medium text-muted">
-            Data — MBTA V3 API (api-v3.mbta.com) · Peta © OpenStreetMap contributors · Diperbarui otomatis setiap 30 detik
-          </p>
-          <p className="text-xs font-medium text-muted">
             Tes Teknikal Frontend Engineer — PT Transportasi Jakarta
           </p>
         </div>
