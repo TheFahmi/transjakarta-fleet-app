@@ -57,7 +57,19 @@ npm run build
 
 # Pratinjau hasil build produksi secara lokal
 npm run preview
+
+# Menjalankan unit test (Vitest)
+npm test
 ```
+
+### Pengujian
+
+40 unit test dengan Vitest + React Testing Library (environment jsdom, tanpa memanggil API asli — fetch dimock):
+
+- `src/lib/api.test.ts` (23 test) — `computePagination` dari `links.last` (termasuk link ter-encode dan halaman terakhir), parsing JSON:API `parseVehicle` beserta relasi route/trip, pembentukan URL dan penanganan error `fetchVehicles` (429, jaringan putus, detail error dari server), `fetchTripsPage` tanpa rute, pemetaan `friendlyError`, label status dan okupansi, serta format tanggal dan waktu relatif.
+- `src/components/Pagination.test.tsx` (7 test) — teks rentang, penanda halaman aktif pada varian mobile dan desktop, callback navigasi dan per halaman, keadaan nonaktif di halaman pertama/terakhir, dan jendela halaman ringkas.
+- `src/components/MultiSelectDropdown.test.tsx` (6 test) — membuka daftar, memilih lewat checkbox, pencarian, chip dan tombol Bersihkan, keadaan nonaktif beserta petunjuknya, dan pesan hasil kosong.
+- `src/components/VehicleCard.test.tsx` (4 test) — isi kartu kendaraan, klik untuk membuka rincian, penanganan data kosong, dan label `StatusBadge`.
 
 ## Arsitektur
 
@@ -155,7 +167,6 @@ Pagination bersifat server-side menggunakan skema pagination resmi MBTA V3 (JSON
 - Filter tambahan berdasarkan status kendaraan dan okupansi.
 - Menyimpan filter dan halaman di URL query string agar dapat dibagikan.
 - Mode peta penuh yang menampilkan semua kendaraan pada halaman saat ini.
-- Pengujian unit untuk helper pagination dan parsing JSON:API.
 - Dukungan API key MBTA melalui variabel lingkungan untuk menaikkan batas rate limit.
 
 ## Lisensi dan Atribusi
