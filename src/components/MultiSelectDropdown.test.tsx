@@ -28,44 +28,47 @@ function setup(overrides?: Partial<React.ComponentProps<typeof MultiSelectDropdo
 }
 
 describe('MultiSelectDropdown', () => {
-  it('menampilkan placeholder dan jumlah terpilih pada pemicu', () => {
+  it('menampilkan placeholder pada pemicu', () => {
     setup();
-    expect(screen.getByRole('button', { name: /Pilih satu atau beberapa rute/ })).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-rute-trigger')).toHaveTextContent('Pilih satu atau beberapa rute');
   });
 
-  it('membuka daftar saat pemicu diklik dan memilih item lewat checkbox', () => {
+  it('membuka panel saat pemicu diklik dan memilih item lewat checkbox', () => {
     const props = setup();
-    fireEvent.click(screen.getByRole('button', { name: /Pilih satu atau beberapa rute/ }));
-    expect(screen.getByText('Blok M - Kota')).toBeInTheDocument();
-    fireEvent.click(screen.getByLabelText(/Blok M - Kota/));
+    fireEvent.click(screen.getByTestId('dropdown-rute-trigger'));
+    expect(screen.getByTestId('dropdown-rute-panel')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-rute-option-1')).toHaveTextContent('Blok M - Kota');
+    const checkbox = screen.getByTestId('dropdown-rute-option-1').querySelector('input[type="checkbox"]');
+    fireEvent.click(checkbox as HTMLElement);
     expect(props.onChange).toHaveBeenCalledWith(['1']);
   });
 
   it('menyaring daftar menurut kata pencarian', () => {
     setup();
-    fireEvent.click(screen.getByRole('button', { name: /Pilih satu atau beberapa rute/ }));
-    fireEvent.change(screen.getByLabelText('Cari Rute'), { target: { value: 'pinang' } });
-    expect(screen.getByText('Pinang Ranti - Pluit')).toBeInTheDocument();
-    expect(screen.queryByText('Blok M - Kota')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('dropdown-rute-trigger'));
+    fireEvent.change(screen.getByTestId('dropdown-rute-search'), { target: { value: 'pinang' } });
+    expect(screen.getByTestId('dropdown-rute-option-9')).toBeInTheDocument();
+    expect(screen.queryByTestId('dropdown-rute-option-1')).not.toBeInTheDocument();
   });
 
   it('menampilkan chip pilihan dan Bersihkan mengosongkan pilihan', () => {
     const props = setup({ selectedIds: ['1', '9'] });
-    expect(screen.getByRole('button', { name: 'Hapus Blok M - Kota' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Bersihkan' }));
+    expect(screen.getByTestId('dropdown-rute-chip-1')).toHaveTextContent('Blok M - Kota');
+    expect(screen.getByTestId('dropdown-rute-chip-9')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('dropdown-rute-clear'));
     expect(props.onChange).toHaveBeenCalledWith([]);
   });
 
   it('menonaktifkan pemicu dan menampilkan petunjuk saat disabled', () => {
     setup({ disabled: true, disabledHint: 'Daftar trip muncul setelah rute dipilih' });
-    expect(screen.getByRole('button', { name: /Pilih satu atau beberapa rute/ })).toBeDisabled();
-    expect(screen.getByText('Daftar trip muncul setelah rute dipilih')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-rute-trigger')).toBeDisabled();
+    expect(screen.getByTestId('dropdown-rute-hint')).toHaveTextContent('Daftar trip muncul setelah rute dipilih');
   });
 
   it('menampilkan pesan kosong saat pencarian tidak menemukan apa pun', () => {
     setup();
-    fireEvent.click(screen.getByRole('button', { name: /Pilih satu atau beberapa rute/ }));
-    fireEvent.change(screen.getByLabelText('Cari Rute'), { target: { value: 'zzz' } });
-    expect(screen.getByText('Tidak ada hasil untuk pencarian ini.')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('dropdown-rute-trigger'));
+    fireEvent.change(screen.getByTestId('dropdown-rute-search'), { target: { value: 'zzz' } });
+    expect(screen.getByTestId('dropdown-rute-empty')).toHaveTextContent('Tidak ada hasil untuk pencarian ini.');
   });
 });

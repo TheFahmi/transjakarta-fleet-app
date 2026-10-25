@@ -69,12 +69,14 @@ export default function MultiSelectDropdown({
   };
 
   const chipCls = 'inline-flex items-center gap-1.5 rounded-full bg-tile px-3 py-1.5 text-xs font-semibold text-tj-blue';
+  const base = `dropdown-${label.toLowerCase()}`;
 
   return (
-    <div ref={rootRef} className="relative w-full">
+    <div ref={rootRef} data-testid={base} className="relative w-full">
       <span className="mb-2 block text-[13px] font-semibold text-ink">{label}</span>
       <button
         type="button"
+        data-testid={`${base}-trigger`}
         disabled={disabled}
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between gap-2 rounded-2xl border border-slate/10 bg-soft px-4 py-3 text-left text-sm font-medium text-ink transition focus:outline-none focus:ring-2 focus:ring-bright/50 disabled:cursor-not-allowed disabled:opacity-50"
@@ -86,33 +88,34 @@ export default function MultiSelectDropdown({
         </span>
         <svg className={`h-4 w-4 shrink-0 text-slate transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg>
       </button>
-      {disabled && disabledHint && <p className="mt-2 text-xs text-muted">{disabledHint}</p>}
+      {disabled && disabledHint && <p data-testid={`${base}-hint`} className="mt-2 text-xs text-muted">{disabledHint}</p>}
 
       {(selectedItems.length > 0 || extraSelected.length > 0) && (
-        <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+        <div data-testid={`${base}-chips`} className="mt-2.5 flex flex-wrap items-center gap-1.5">
           {selectedItems.map((item) => (
-            <span key={item.id} className={chipCls}>
+            <span key={item.id} data-testid={`${base}-chip-${item.id}`} className={chipCls}>
               <span className="max-w-40 truncate">{item.label}</span>
               <button type="button" onClick={() => toggle(item.id)} aria-label={`Hapus ${item.label}`} className="font-bold text-tj-blue/70 hover:text-danger">&times;</button>
             </span>
           ))}
           {extraSelected.map((id) => (
-            <span key={id} className={chipCls}>
+            <span key={id} data-testid={`${base}-chip-${id}`} className={chipCls}>
               <span className="max-w-40 truncate">{id}</span>
               <button type="button" onClick={() => toggle(id)} aria-label={`Hapus ${id}`} className="font-bold text-tj-blue/70 hover:text-danger">&times;</button>
             </span>
           ))}
-          <button type="button" onClick={() => onChange([])} className="text-xs font-semibold text-danger hover:underline">
+          <button type="button" data-testid={`${base}-clear`} onClick={() => onChange([])} className="text-xs font-semibold text-danger hover:underline">
             Bersihkan
           </button>
         </div>
       )}
 
       {open && !disabled && (
-        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-2xl bg-white shadow-pop ring-1 ring-slate/10">
+        <div data-testid={`${base}-panel`} className="absolute z-30 mt-2 w-full overflow-hidden rounded-2xl bg-white shadow-pop ring-1 ring-slate/10">
           <div className="border-b border-slate/10 p-2.5">
             <input
               type="text"
+              data-testid={`${base}-search`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={`Cari ${label.toLowerCase()}...`}
@@ -120,24 +123,24 @@ export default function MultiSelectDropdown({
               aria-label={`Cari ${label}`}
             />
           </div>
-          <div ref={listRef} className="max-h-64 overflow-y-auto p-1.5" role="listbox" aria-multiselectable="true">
+          <div ref={listRef} data-testid={`${base}-list`} className="max-h-64 overflow-y-auto p-1.5" role="listbox" aria-multiselectable="true">
             {loading && (
-              <div className="flex items-center justify-center gap-2 py-6 text-sm text-slate">
+              <div data-testid={`${base}-loading`} className="flex items-center justify-center gap-2 py-6 text-sm text-slate">
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate/20 border-t-tj-blue" />
                 Memuat…
               </div>
             )}
             {!loading && error && (
-              <div className="px-3 py-4 text-sm text-danger">
+              <div data-testid={`${base}-error`} className="px-3 py-4 text-sm text-danger">
                 <p>{error}</p>
                 {onRetry && <button type="button" onClick={onRetry} className="mt-2 font-semibold text-tj-blue underline">Muat Ulang</button>}
               </div>
             )}
             {!loading && !error && filtered.length === 0 && (
-              <p className="px-3 py-4 text-sm text-slate">Tidak ada hasil untuk pencarian ini.</p>
+              <p data-testid={`${base}-empty`} className="px-3 py-4 text-sm text-slate">Tidak ada hasil untuk pencarian ini.</p>
             )}
             {!loading && filtered.map((item) => (
-              <label key={item.id} className="flex cursor-pointer items-start gap-2.5 rounded-xl px-2.5 py-2 text-sm hover:bg-soft">
+              <label key={item.id} data-testid={`${base}-option-${item.id}`} className="flex cursor-pointer items-start gap-2.5 rounded-xl px-2.5 py-2 text-sm hover:bg-soft">
                 <input
                   type="checkbox"
                   checked={selectedSet.has(item.id)}
@@ -155,15 +158,15 @@ export default function MultiSelectDropdown({
                 </span>
               </label>
             ))}
-            <div ref={sentinelRef} className="h-1" />
+            <div ref={sentinelRef} data-testid={`${base}-sentinel`} className="h-1" />
             {loadingMore && (
-              <div className="flex items-center justify-center gap-2 py-3 text-xs text-slate">
+              <div data-testid={`${base}-loading-more`} className="flex items-center justify-center gap-2 py-3 text-xs text-slate">
                 <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate/20 border-t-tj-blue" />
                 Memuat berikutnya…
               </div>
             )}
             {!loading && !hasMore && items.length > 0 && (
-              <p className="py-3 text-center text-[11px] font-medium text-muted">Seluruh daftar sudah dimuat.</p>
+              <p data-testid={`${base}-end`} className="py-3 text-center text-[11px] font-medium text-muted">Seluruh daftar sudah dimuat.</p>
             )}
           </div>
         </div>

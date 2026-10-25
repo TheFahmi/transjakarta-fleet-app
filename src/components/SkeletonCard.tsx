@@ -1,6 +1,6 @@
 export default function SkeletonCard() {
   return (
-    <div className="animate-pulse rounded-[20px] bg-white p-5 shadow-card" aria-hidden="true">
+    <div data-testid="skeleton-card" className="animate-pulse rounded-[20px] bg-white p-5 shadow-card" aria-hidden="true">
       <div className="flex items-center gap-3">
         <div className="h-[42px] w-[42px] shrink-0 rounded-full bg-tile" />
         <div className="h-4 w-2/3 rounded-full bg-soft" />

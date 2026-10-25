@@ -20,7 +20,7 @@ export default function StatusBadge({ status }: { status: string | null }) {
   const pill = (status && PILL[status]) || 'bg-soft text-slate';
   const dot = (status && DOT[status]) || 'bg-muted';
   return (
-    <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 ${pill}`}>
+    <span data-testid="status-badge" data-status={status ?? ''} className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 ${pill}`}>
       <span className={`h-2 w-2 rounded-full ${dot}`} aria-hidden="true" />
       <span className="text-xs font-bold whitespace-nowrap">
         {statusLabel(status)}

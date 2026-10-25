@@ -95,6 +95,7 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
 
   return (
     <div
+      data-testid="vehicle-detail-modal"
       className="fixed inset-0 z-50 flex items-end justify-center bg-[#101E2E]/50 p-0 sm:items-center sm:p-6"
       onClick={onClose}
       role="dialog"
@@ -102,6 +103,7 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
       aria-label="Rincian kendaraan"
     >
       <div
+        data-testid="detail-panel"
         className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-t-[24px] bg-white shadow-pop sm:m-2 sm:rounded-[24px]"
         onClick={(e) => e.stopPropagation()}
       >
@@ -111,6 +113,7 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
           </h2>
           <button
             type="button"
+            data-testid="detail-close-button"
             onClick={onClose}
             aria-label="Tutup rincian"
             className="shrink-0 rounded-full bg-tile px-4 py-2 text-xs font-bold text-tj-blue transition-colors hover:bg-soft focus:outline-none focus:ring-2 focus:ring-bright/50"
@@ -121,18 +124,19 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
 
         <div className="px-6 py-5">
           {loading && (
-            <div className="flex flex-col items-center justify-center gap-3 py-16">
+            <div data-testid="detail-loading" className="flex flex-col items-center justify-center gap-3 py-16">
               <span className="h-10 w-10 animate-spin rounded-full border-4 border-slate/15 border-t-tj-blue" />
               <p className="text-[13px] font-semibold text-slate">Memuat rincian kendaraan…</p>
             </div>
           )}
 
           {!loading && error && (
-            <div className="rounded-2xl bg-[#FDECEC] px-5 py-4">
+            <div data-testid="detail-error" className="rounded-2xl bg-[#FDECEC] px-5 py-4">
               <p className="text-sm font-bold text-danger">Rincian tidak dapat dimuat</p>
               <p className="mt-1 text-sm text-slate">{error}</p>
               <button
                 type="button"
+                data-testid="detail-retry-button"
                 onClick={() => setRetryKey((k) => k + 1)}
                 className="mt-3 rounded-full bg-danger px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#b82424] focus:outline-none focus:ring-2 focus:ring-danger/50"
               >
@@ -142,7 +146,7 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
           )}
 
           {!loading && !error && vehicle && a && (
-            <div className="space-y-7">
+            <div data-testid="detail-content" className="space-y-7">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <StatusBadge status={a.current_status} />
                 <span className="hidden h-4 w-px bg-slate/15 sm:block" aria-hidden="true" />
@@ -155,10 +159,10 @@ export default function VehicleDetailModal({ vehicleId, onClose }: Props) {
               {a.latitude !== null && a.longitude !== null ? (
                 <div>
                   <SectionTitle>Posisi di Peta</SectionTitle>
-                  <div ref={mapRef} className="mt-3 h-64 w-full overflow-hidden rounded-2xl ring-1 ring-slate/10" />
+                  <div ref={mapRef} data-testid="detail-map" className="mt-3 h-64 w-full overflow-hidden rounded-2xl ring-1 ring-slate/10" />
                 </div>
               ) : (
-                <p className="rounded-2xl bg-soft px-4 py-3 text-sm text-slate">Koordinat kendaraan tidak tersedia, peta tidak dapat ditampilkan.</p>
+                <p data-testid="detail-no-coords" className="rounded-2xl bg-soft px-4 py-3 text-sm text-slate">Koordinat kendaraan tidak tersedia, peta tidak dapat ditampilkan.</p>
               )}
 
               <section>
