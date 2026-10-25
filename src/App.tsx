@@ -60,7 +60,7 @@ function StatCell({
 
 export default function App() {
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(12);
   const [selectedRoutes, setSelectedRoutes] = useState<string[]>([]);
   const [selectedTrips, setSelectedTrips] = useState<string[]>([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);

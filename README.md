@@ -8,7 +8,7 @@ Checklist sesuai spesifikasi tes:
 
 - [x] Mengambil data kendaraan melalui REST API MBTA V3 (`GET /vehicles`)
 - [x] Menampilkan data kendaraan dalam bentuk grid Card: label kendaraan, indikator status saat ini (`IN_TRANSIT_TO`, `STOPPED_AT`, `INCOMING_AT` ditampilkan sebagai kotak warna solid dan label uppercase yang mudah dibaca), latitude, longitude, dan waktu update terakhir (format tanggal Indonesia dan waktu relatif, contoh: "5 menit lalu")
-- [x] Pagination server-side dengan teks rentang data (contoh: "Menampilkan 1-10 dari 100 Data"), pilihan jumlah data per halaman (5 / 10 / 20 / 50), informasi jumlah halaman, dan tombol Pertama, Sebelumnya, nomor halaman, Berikutnya, Terakhir
+- [x] Pagination server-side dengan teks rentang data (contoh: "Menampilkan 1-10 dari 100 Data"), pilihan jumlah data per halaman (5 / 10 / 12 / 20 / 50, bawaan 12), informasi jumlah halaman, dan tombol Pertama, Sebelumnya, nomor halaman, Berikutnya, Terakhir
 - [x] Filter kendaraan berdasarkan Rute dan Trip dalam bentuk dropdown custom multi-select dengan checkbox, kotak pencarian, chips pilihan terpilih, dan tombol hapus semua
 - [x] Infinite scroll / lazy load pada daftar Rute dan Trip di dalam dropdown (IntersectionObserver memuat halaman berikutnya saat daftar di-scroll ke bawah)
 - [x] Detail kendaraan dalam bentuk popup/modal: label, status, latitude, longitude, waktu update terakhir, data rute, data trip, dan data lain (bearing, kecepatan, status okupansi, urutan pemberhentian, direction ID, jumlah carriages, stop ID)
@@ -146,7 +146,7 @@ Endpoint yang dipakai:
 
 Pagination bersifat server-side menggunakan skema pagination resmi MBTA V3 (JSON:API):
 
-- `page[limit]`: jumlah data per halaman, dari selector per halaman (5 / 10 / 20 / 50).
+- `page[limit]`: jumlah data per halaman, dari selector per halaman (5 / 10 / 12 / 20 / 50; bawaan 12).
 - `page[offset]`: posisi awal data, dihitung `(halaman - 1) * perPage`.
 - Server memotong data; browser hanya menerima satu halaman pada satu waktu.
 - Total halaman dari `links.last`: `totalPages = floor(lastOffset / limit) + 1`.

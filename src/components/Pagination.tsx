@@ -60,7 +60,7 @@ export default function Pagination({ page, totalPages, perPage, totalCount, curr
       className="rounded-xl border border-slate/10 bg-soft px-2.5 py-1.5 text-[13px] font-semibold text-ink tabular-nums focus:outline-none focus:ring-2 focus:ring-bright/50"
       aria-label="Jumlah data per halaman"
     >
-      {[5, 10, 20, 50].map((n) => (
+      {[5, 10, 12, 20, 50].map((n) => (
         <option key={n} value={n}>{n}</option>
       ))}
     </select>
