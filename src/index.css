@@ -81,3 +81,16 @@ body {
 .leaflet-container {
   font-family: var(--font-sans);
 }
+
+/* Elemen interaktif memakai kursor pointer (Tailwind v4 bawaan: default) */
+@layer base {
+  button,
+  [role="button"],
+  select,
+  summary {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
+  }
+}
